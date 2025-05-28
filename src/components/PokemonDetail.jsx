@@ -8,28 +8,6 @@ export default function PokemonDetail() {
   const [pokemon, setPokemon] = useState(null);
   const [evolutionChain, setEvolutionChain] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPokemonDetail = async () => {
-      try {
-        const pokemonResponse = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/${id}`
-        );
-        setPokemon(pokemonResponse.data);
-
-        const speciesResponse = await axios.get(pokemonResponse.data.species.url);
-        const evolutionResponse = await axios.get(speciesResponse.data.evolution_chain.url);
-        setEvolutionChain(evolutionResponse.data);
-      } catch (error) {
-        console.error("Error fetching pokemon details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPokemonDetail();
-  }, [id]);
-
   const renderEvolutionChain = (chain) => {
     const evolutions = [];
     let current = chain;
@@ -37,7 +15,7 @@ export default function PokemonDetail() {
     while (current) {
       evolutions.push({
         name: current.species.name,
-        id: current.species.url.split('/')[6]
+        id: current.species.url.split("/")[6],
       });
       current = current.evolves_to[0];
     }
@@ -61,6 +39,31 @@ export default function PokemonDetail() {
     );
   };
 
+  useEffect(() => {
+    const fetchPokemonDetail = async () => {
+      try {
+        const pokemonResponse = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${id}`
+        );
+        setPokemon(pokemonResponse.data);
+
+        const speciesResponse = await axios.get(
+          pokemonResponse.data.species.url
+        );
+        const evolutionResponse = await axios.get(
+          speciesResponse.data.evolution_chain.url
+        );
+        setEvolutionChain(evolutionResponse.data);
+      } catch (error) {
+        console.error("Error fetching pokemon details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPokemonDetail();
+  }, [id]);
+
   return (
     <>
       {loading ? (
@@ -68,7 +71,11 @@ export default function PokemonDetail() {
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
         </div>
       ) : (
-        <div className={`min-h-dvh w-full p-6 ${pageDict[pokemon?.types?.[0]?.type?.name] || "bg-white"}`}>
+        <div
+          className={`min-h-dvh w-full p-6 ${
+            pageDict[pokemon?.types?.[0]?.type?.name] || "bg-white"
+          }`}
+        >
           <div className="max-w-4xl mx-auto">
             <Link
               to="/"
@@ -76,12 +83,12 @@ export default function PokemonDetail() {
             >
               <span>←</span> Voltar
             </Link>
-            
+
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
               <h1 className="text-3xl font-bold capitalize mb-4 text-center">
                 {pokemon.name} - #{pokemon.id.toString().padStart(4, "0")}
               </h1>
-      
+
               <div className="flex flex-col items-center space-y-2">
                 <img
                   src={pokemon.sprites.front_default}
@@ -97,7 +104,7 @@ export default function PokemonDetail() {
                     <p>Peso: {pokemon.weight / 10}kg</p>
                     <p>Experiência Base: {pokemon.base_experience}</p>
                   </div>
-      
+
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h2 className="font-bold text-xl mb-2">Tipos</h2>
                     <div className="flex gap-2">
@@ -113,7 +120,7 @@ export default function PokemonDetail() {
                       ))}
                     </div>
                   </div>
-      
+
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h2 className="font-bold text-xl mb-2">Estatísticas</h2>
                     <div className="space-y-2">
@@ -126,14 +133,16 @@ export default function PokemonDetail() {
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-green-600 h-2 rounded-full"
-                              style={{ width: `${(stat.base_stat / 255) * 100}%` }}
+                              style={{
+                                width: `${(stat.base_stat / 255) * 100}%`,
+                              }}
                             ></div>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-      
+
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h2 className="font-bold text-xl mb-2">Habilidades</h2>
                     <div className="flex flex-wrap gap-2">
@@ -148,7 +157,7 @@ export default function PokemonDetail() {
                       ))}
                     </div>
                   </div>
-      
+
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h2 className="font-bold text-xl mb-2">Movimentos</h2>
                     <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
@@ -162,10 +171,12 @@ export default function PokemonDetail() {
                       ))}
                     </div>
                   </div>
-      
+
                   {evolutionChain && (
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h2 className="font-bold text-xl mb-2">Linha Evolutiva</h2>
+                      <h2 className="font-bold text-xl mb-2">
+                        Linha Evolutiva
+                      </h2>
                       {renderEvolutionChain(evolutionChain.chain)}
                     </div>
                   )}

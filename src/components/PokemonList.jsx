@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect, useCallback, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PokemonCard from "./PokemonCard";
 import { nameDict } from "../lib/typeDict";
@@ -19,7 +19,6 @@ export default function PokemonList() {
   const [selectedType, setSelectedType] = useState("");
   const [allPokemons, setAllPokemons] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [typeCache, setTypeCache] = useState({});
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
   const { favoritePokemons } = useFavorites();
   const navigate = useNavigate();
@@ -50,14 +49,10 @@ export default function PokemonList() {
   };
 
   const fetchPokemonsByType = async (type) => {
-    if (typeCache[type]) {
-      return typeCache[type];
-    }
 
     try {
       const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
       const pokemonOfType = response.data.pokemon.map(p => p.pokemon.name);
-      setTypeCache(prev => ({ ...prev, [type]: pokemonOfType }));
       return pokemonOfType;
     } catch (error) {
       console.error("Erro ao buscar tipo:", error);
@@ -97,7 +92,6 @@ export default function PokemonList() {
     try {
       let filteredList = [...allPokemons];
       
-      // Apply type filter
       if (type) {
         const pokemonOfType = await fetchPokemonsByType(type);
         filteredList = filteredList.filter(pokemon => 
@@ -105,7 +99,6 @@ export default function PokemonList() {
         );
       }
 
-      // Apply search filter
       if (searchValue) {
         const searchLower = searchValue.toLowerCase();
         filteredList = filteredList.filter(pokemon =>
