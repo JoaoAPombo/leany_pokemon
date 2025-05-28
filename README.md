@@ -1,4 +1,5 @@
 ## Aplicativo de Busca de pokemons
+-Aplicativo feito para um projeto feito para Leany
 
 ## Funcionalidades
 
@@ -37,9 +38,11 @@ A aplicação estará disponível em [http://localhost:3000](http://localhost:30
 ## Tecnologias Utilizadas
 
 - React.js
-- React Router DOM
-- Axios
+- React Router DOM (Usado para fazer a rota dos cliques)
+- Axios (Usado para pegar os dados da api)
 - Tailwind CSS
+- Vercel (Usado para fazer o deploy da aplicação)
+- Dicionarios (Para traduzir os tipos e criar as cores que mudam com eles)
 
 ## Deploy
 - A aplicação está disponível em: https://leany-pokemon.vercel.app
