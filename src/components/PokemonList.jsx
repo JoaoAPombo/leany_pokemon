@@ -230,8 +230,6 @@ export default function PokemonList() {
                   />
                 ))}
               </ul>
-
-              {/* Only show pagination when no filters are active */}
               {!searchTerm && !selectedType && !showOnlyFavorites && (
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mt-4">
                   <button

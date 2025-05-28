@@ -29,33 +29,36 @@ export default function PokemonComparison() {
   }, [id1, id2]);
 
   if (loading) {
-    return <div className="h-dvh w-dvw flex items-center justify-center">Carregando...</div>;
+    return (
+      <div className="min-h-dvh w-full flex items-center justify-center p-4 bg-gray-100">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   const renderStats = (stat1, stat2) => {
-    const maxStat = Math.max(stat1, stat2);
     const winner = stat1 > stat2 ? 'left' : stat1 < stat2 ? 'right' : 'tie';
 
     return (
-      <div className="flex items-center gap-4">
-        <div className={`text-right w-12 ${winner === 'left' ? 'font-bold text-green-600' : ''}`}>
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+        <div className={`text-center sm:text-right w-16 ${winner === 'left' ? 'font-bold text-green-600' : ''}`}>
           {stat1}
         </div>
-        <div className="flex-1 flex gap-2">
-          <div className="w-1/2 bg-gray-200 rounded-full h-2">
+        <div className="flex-1 flex gap-2 w-full">
+          <div className="w-1/2 bg-gray-200 rounded-full h-3">
             <div
-              className={`h-2 rounded-full ${winner === 'left' ? 'bg-green-600' : 'bg-gray-400'}`}
+              className={`h-3 rounded-full ${winner === 'left' ? 'bg-green-600' : 'bg-gray-400'}`}
               style={{ width: `${(stat1 / 255) * 100}%` }}
             ></div>
           </div>
-          <div className="w-1/2 bg-gray-200 rounded-full h-2">
+          <div className="w-1/2 bg-gray-200 rounded-full h-3">
             <div
-              className={`h-2 rounded-full ${winner === 'right' ? 'bg-green-600' : 'bg-gray-400'}`}
+              className={`h-3 rounded-full ${winner === 'right' ? 'bg-green-600' : 'bg-gray-400'}`}
               style={{ width: `${(stat2 / 255) * 100}%` }}
             ></div>
           </div>
         </div>
-        <div className={`w-12 ${winner === 'right' ? 'font-bold text-green-600' : ''}`}>
+        <div className={`text-center sm:text-left w-16 ${winner === 'right' ? 'font-bold text-green-600' : ''}`}>
           {stat2}
         </div>
       </div>
@@ -63,7 +66,7 @@ export default function PokemonComparison() {
   };
 
   return (
-    <div className="min-h-dvh p-4 bg-gray-100">
+    <div className="min-h-dvh p-2 sm:p-4 bg-gray-100">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/"
@@ -72,23 +75,23 @@ export default function PokemonComparison() {
           Voltar
         </Link>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Pokemon Cards */}
-          <div className={`p-4 rounded-lg ${pageDict[pokemon1.types[0].type.name]}`}>
-            <div className="bg-white rounded-lg p-4">
-              <h2 className="text-2xl font-bold capitalize text-center">
+          <div className={`p-2 sm:p-4 rounded-lg ${pageDict[pokemon1.types[0].type.name]}`}>
+            <div className="bg-white rounded-lg p-3 sm:p-4">
+              <h2 className="text-xl sm:text-2xl font-bold capitalize text-center">
                 {pokemon1.name} #{pokemon1.id.toString().padStart(4, "0")}
               </h2>
               <img
                 src={pokemon1.sprites.front_default}
                 alt={pokemon1.name}
-                className="mx-auto h-48"
+                className="mx-auto h-32 sm:h-48"
               />
-              <div className="flex gap-2 justify-center">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {pokemon1.types.map((type) => (
                   <span
                     key={type.type.name}
-                    className={`px-3 py-1 text-sm rounded-md capitalize font-semibold ${
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md capitalize font-semibold ${
                       badgeDict[type.type.name]
                     }`}
                   >
@@ -99,21 +102,21 @@ export default function PokemonComparison() {
             </div>
           </div>
 
-          <div className={`p-4 rounded-lg ${pageDict[pokemon2.types[0].type.name]}`}>
-            <div className="bg-white rounded-lg p-4">
-              <h2 className="text-2xl font-bold capitalize text-center">
+          <div className={`p-2 sm:p-4 rounded-lg ${pageDict[pokemon2.types[0].type.name]}`}>
+            <div className="bg-white rounded-lg p-3 sm:p-4">
+              <h2 className="text-xl sm:text-2xl font-bold capitalize text-center">
                 {pokemon2.name} #{pokemon2.id.toString().padStart(4, "0")}
               </h2>
               <img
                 src={pokemon2.sprites.front_default}
                 alt={pokemon2.name}
-                className="mx-auto h-48"
+                className="mx-auto h-32 sm:h-48"
               />
-              <div className="flex gap-2 justify-center">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {pokemon2.types.map((type) => (
                   <span
                     key={type.type.name}
-                    className={`px-3 py-1 text-sm rounded-md capitalize font-semibold ${
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md capitalize font-semibold ${
                       badgeDict[type.type.name]
                     }`}
                   >
@@ -125,12 +128,12 @@ export default function PokemonComparison() {
           </div>
 
           {/* Stats Comparison */}
-          <div className="col-span-2 bg-white rounded-lg p-6">
-            <h3 className="text-xl font-bold mb-4">Comparação de Estatísticas</h3>
-            <div className="space-y-4">
+          <div className="col-span-1 sm:col-span-2 bg-white rounded-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold mb-4">Comparação de Estatísticas</h3>
+            <div className="space-y-6">
               {pokemon1.stats.map((stat, index) => (
                 <div key={stat.stat.name}>
-                  <div className="text-center mb-1 font-medium capitalize">
+                  <div className="text-center mb-2 font-medium capitalize text-sm sm:text-base">
                     {stat.stat.name}
                   </div>
                   {renderStats(stat.base_stat, pokemon2.stats[index].base_stat)}
